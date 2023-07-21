@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "player.h"  // Функции игрока
 #include "enemy.h"  // Функции противника
@@ -9,22 +10,21 @@
 
 void menu(Player *player)
 {
+    srand(time(NULL));
     char c = '\n';
     char exit = 0;  // 0 - игра, 1 - выход, 2 - проигрыш
     char location = 0;
     char room = 0;
+    char next_room = 0;
     char choice = 0;
     char choice_max = 0;
-    char dungeon_state[20] = {0};
+    char dungeon_state[38] = {0};  // 1 бит - посещена / не посещена комната
     while (!exit)
     {
-        player_info(player);
-
         switch(location)
         {
             case 0:
-                dungeon(room, player, dungeon_state);
-                choice_max = dungeon_choice_max(room);
+                dungeon(room, &next_room, player, dungeon_state);
                 break;
             // case 1:
             //     village();
@@ -36,9 +36,12 @@ void menu(Player *player)
             //     hell();
             //     break;
         }
-        choice = validate_input(choice_max);
-        if (!choice) exit = 1;
-        else room = dungeon_next_room(room, choice, player);
+        room = next_room;
+        if (player->hp <= 0)
+        {
+            exit = 2;
+            printf("Игрок погиб.\n");
+        }
     }
 }
 

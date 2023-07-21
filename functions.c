@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "functions.h"
 
@@ -15,8 +16,13 @@ int validate_input(int choice_max)
     char c = '\n';
     // clear_stdin(c);
     scanf("%d%c", &choice, &c);
-    if (c == '\n' && choice && choice >= 1 && choice <= choice_max) return choice;
+    if (c == '\n' && choice && choice >= 1 && choice <= choice_max)
+    {
+        system("clear");
+        return choice;
+    }
     // printf("Неверный ввод, попробуйте снова");
     // if (c == 'q') break;
+    system("clear");
     return 0;
 }
